@@ -16,8 +16,6 @@ class Comfy::Admin::Cms::BaseController < ComfortableMexicanSofa.config.base_con
                 :load_fixtures,
                 :except => :jump
 
-  layout 'comfy/admin/cms'
-
   if ComfortableMexicanSofa.config.admin_cache_sweeper.present?
     cache_sweeper *ComfortableMexicanSofa.config.admin_cache_sweeper
   end
