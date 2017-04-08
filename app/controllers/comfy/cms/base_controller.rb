@@ -13,6 +13,9 @@ protected
 
     if @cms_site
       if @cms_site.path.present? && !params[:site_id]
+        cms_path  = "#{params[:slug]}/#{params[:year]}"
+        cms_path += "/#{params[:cms_path]}" if params[:cms_path].present?
+        params[:cms_path] = cms_path
         if params[:cms_path] && params[:cms_path].match(/\A#{@cms_site.path}/)
           params[:cms_path].gsub!(/\A#{@cms_site.path}/, '')
           params[:cms_path] && params[:cms_path].gsub!(/\A\//, '')
