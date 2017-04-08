@@ -1,5 +1,6 @@
 class Comfy::Cms::Site < ActiveRecord::Base
   self.table_name = 'comfy_cms_sites'
+  acts_as_tenant(:edition)
 
   # -- Relationships --------------------------------------------------------
   with_options :dependent => :destroy do |site|
@@ -20,13 +21,13 @@ class Comfy::Cms::Site < ActiveRecord::Base
   # -- Validations ----------------------------------------------------------
   validates :identifier,
     :presence   => true,
-    :uniqueness => true,
+    :uniqueness => { :scope => :edition_id },
     :format     => { :with => /\A\w[a-z0-9_-]*\z/i }
   validates :label,
     :presence   => true
   validates :hostname,
     :presence   => true,
-    :uniqueness => { :scope => :path },
+    :uniqueness => { :scope => [:path, :edition_id] },
     :format     => { :with => /\A[\w\.\-]+(?:\:\d+)?\z/ }
 
   # -- Scopes ---------------------------------------------------------------
