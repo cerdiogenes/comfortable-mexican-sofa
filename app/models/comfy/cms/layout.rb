@@ -2,6 +2,7 @@
 
 class Comfy::Cms::Layout < ActiveRecord::Base
   self.table_name = 'comfy_cms_layouts'
+  acts_as_tenant(:edition)
   
   cms_acts_as_tree
   cms_is_mirrored
@@ -24,7 +25,7 @@ class Comfy::Cms::Layout < ActiveRecord::Base
     :presence   => true
   validates :identifier,
     :presence   => true,
-    :uniqueness => { :scope => :site_id },
+    :uniqueness => { :scope => [:site_id, :edition_id] },
     :format     => { :with => /\A\w[a-z0-9_-]*\z/i }
     
   # -- Scopes ---------------------------------------------------------------

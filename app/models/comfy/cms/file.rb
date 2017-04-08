@@ -1,5 +1,6 @@
 class Comfy::Cms::File < ActiveRecord::Base
   self.table_name = 'comfy_cms_files'
+  acts_as_tenant(:edition)
 
   IMAGE_MIMETYPES = %w(gif jpeg pjpeg png tiff).collect{|subtype| "image/#{subtype}"}
 
@@ -30,7 +31,7 @@ class Comfy::Cms::File < ActiveRecord::Base
   do_not_validate_attachment_file_type :file
 
   validates :file_file_name,
-    :uniqueness => {:scope => [:site_id, :block_id]}
+    :uniqueness => {:scope => [:site_id, :block_id, :edition_id]}
 
   # -- Callbacks ------------------------------------------------------------
   before_save   :assign_label

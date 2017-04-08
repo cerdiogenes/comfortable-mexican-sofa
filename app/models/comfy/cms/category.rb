@@ -1,5 +1,6 @@
 class Comfy::Cms::Category < ActiveRecord::Base
   self.table_name = 'comfy_cms_categories'
+  acts_as_tenant(:edition)
   
   # -- Relationships --------------------------------------------------------
   belongs_to :site
@@ -11,7 +12,7 @@ class Comfy::Cms::Category < ActiveRecord::Base
     :presence   => true
   validates :label,
     :presence   => true,
-    :uniqueness => { :scope => [:categorized_type, :site_id] }
+    :uniqueness => { :scope => [:categorized_type, :site_id, :edition_id] }
   validates :categorized_type,
     :presence   => true
     

@@ -1,5 +1,6 @@
 class Comfy::Cms::Categorization < ActiveRecord::Base
   self.table_name = 'comfy_cms_categorizations'
+  acts_as_tenant(:edition)
   
   # -- Relationships --------------------------------------------------------
   belongs_to :category
@@ -11,6 +12,6 @@ class Comfy::Cms::Categorization < ActiveRecord::Base
     :presence   => true
   validates :category_id,
     :presence   => true,
-    :uniqueness => { :scope => [:categorized_type, :categorized_id] }
+    :uniqueness => { :scope => [:categorized_type, :categorized_id, :edition_id] }
   
 end

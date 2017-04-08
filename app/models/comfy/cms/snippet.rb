@@ -1,5 +1,6 @@
 class Comfy::Cms::Snippet < ActiveRecord::Base
   self.table_name = 'comfy_cms_snippets'
+  acts_as_tenant(:edition)
   
   cms_is_categorized
   cms_is_mirrored
@@ -21,7 +22,7 @@ class Comfy::Cms::Snippet < ActiveRecord::Base
     :presence   => true
   validates :identifier,
     :presence   => true,
-    :uniqueness => { :scope => :site_id },
+    :uniqueness => { :scope => [:site_id, :edition_id] },
     :format     => { :with => /\A\w[a-z0-9_-]*\z/i }
     
   # -- Scopes ---------------------------------------------------------------

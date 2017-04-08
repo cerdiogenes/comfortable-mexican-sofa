@@ -2,6 +2,7 @@
 
 class Comfy::Cms::Page < ActiveRecord::Base
   self.table_name = 'comfy_cms_pages'
+  acts_as_tenant(:edition)
 
   cms_acts_as_tree :counter_cache => :children_count
   cms_is_categorized
@@ -31,7 +32,7 @@ class Comfy::Cms::Page < ActiveRecord::Base
     :presence   => true
   validates :slug,
     :presence   => true,
-    :uniqueness => { :scope => :parent_id },
+    :uniqueness => { :scope => [:parent_id, :edition_id] },
     :unless     => lambda{ |p| p.site && (p.site.pages.count == 0 || p.site.pages.root == self) }
   validates :layout,
     :presence   => true

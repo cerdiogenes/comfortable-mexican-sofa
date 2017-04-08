@@ -1,5 +1,6 @@
 class Comfy::Cms::Block < ActiveRecord::Base
   self.table_name = 'comfy_cms_blocks'
+  acts_as_tenant(:edition)
 
   FILE_CLASSES = %w(ActionDispatch::Http::UploadedFile Rack::Test::UploadedFile File).freeze
 
@@ -17,7 +18,7 @@ class Comfy::Cms::Block < ActiveRecord::Base
   # -- Validations ----------------------------------------------------------
   validates :identifier,
     :presence   => true,
-    :uniqueness => { :scope => [:blockable_type, :blockable_id] }
+    :uniqueness => { :scope => [:blockable_type, :blockable_id, :edition_id] }
 
   # -- Callbacks ------------------------------------------------------------
   before_save :prepare_files
