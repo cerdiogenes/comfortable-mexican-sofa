@@ -13,7 +13,13 @@ protected
 
     if @cms_site
       if @cms_site.path.present? && !params[:site_id]
-        cms_path  = "#{params[:slug]}/#{params[:path]}"
+        event = Event.find_by(acronym: params[:slug].upcase)
+        edition = event.editions.find_by(path: params[:path])
+        if edition.nil?
+          params[:cms_path] = params[:path] if params[:path].present?
+          edition = event.editions.last
+        end
+        cms_path  = "#{event.acronym}/#{edition.path}"
         cms_path += "/#{params[:cms_path]}" if params[:cms_path].present?
         params[:cms_path] = cms_path
         if params[:cms_path] && params[:cms_path].match(/\A#{@cms_site.path}/)
