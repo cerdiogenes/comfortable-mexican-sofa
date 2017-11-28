@@ -21,8 +21,8 @@ class Comfy::Cms::File < ActiveRecord::Base
   before_post_process :is_image?
 
   # -- Relationships --------------------------------------------------------
-  belongs_to :site
-  belongs_to :block
+  belongs_to :site, :optional => true
+  belongs_to :block, :optional => true
 
   # -- Validations ----------------------------------------------------------
   validates :site_id,

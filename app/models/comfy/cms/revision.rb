@@ -5,7 +5,7 @@ class Comfy::Cms::Revision < ActiveRecord::Base
   serialize :data
   
   # -- Relationships --------------------------------------------------------
-  belongs_to :record, :polymorphic => true
+  belongs_to :record, :polymorphic => true, :optional => true
   
   # -- Scopes ---------------------------------------------------------------
   default_scope -> { order('created_at DESC') }

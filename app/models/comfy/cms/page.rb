@@ -11,10 +11,10 @@ class Comfy::Cms::Page < ActiveRecord::Base
   cms_has_revisions_for :blocks_attributes
 
   # -- Relationships --------------------------------------------------------
-  belongs_to :site
-  belongs_to :layout
+  belongs_to :site, :optional => true
+  belongs_to :layout, :optional => true
   belongs_to :target_page,
-    :class_name => 'Comfy::Cms::Page'
+    :class_name => 'Comfy::Cms::Page', :optional => true
 
   # -- Callbacks ------------------------------------------------------------
   before_validation :assigns_label,

@@ -7,7 +7,7 @@ class Comfy::Cms::Snippet < ActiveRecord::Base
   cms_has_revisions_for :content
   
   # -- Relationships --------------------------------------------------------
-  belongs_to :site
+  belongs_to :site, :optional => true
   
   # -- Callbacks ------------------------------------------------------------
   before_validation :assign_label

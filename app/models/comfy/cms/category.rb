@@ -3,7 +3,7 @@ class Comfy::Cms::Category < ActiveRecord::Base
   acts_as_tenant(:edition)
   
   # -- Relationships --------------------------------------------------------
-  belongs_to :site
+  belongs_to :site, :optional => true
   has_many :categorizations,
     :dependent => :destroy
     

@@ -3,9 +3,9 @@ class Comfy::Cms::Categorization < ActiveRecord::Base
   acts_as_tenant(:edition)
   
   # -- Relationships --------------------------------------------------------
-  belongs_to :category
+  belongs_to :category, :optional => true
   belongs_to :categorized,
-    :polymorphic => true
+    :polymorphic => true, :optional => true
     
   # -- Validations ----------------------------------------------------------
   validates :categorized_type, :categorized_id,
