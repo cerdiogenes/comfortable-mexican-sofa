@@ -19,7 +19,7 @@ class Comfy::Cms::Fragment < ActiveRecord::Base
   # -- Validations -------------------------------------------------------------
   validates :identifier,
     presence:   true,
-    uniqueness: { scope: :record }
+    uniqueness: { scope: %i[record edition_id] }
 
   # -- Instance Methods --------------------------------------------------------
 

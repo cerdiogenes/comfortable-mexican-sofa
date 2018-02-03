@@ -1,6 +1,7 @@
 class Comfy::Cms::Translation < ActiveRecord::Base
 
   self.table_name = "comfy_cms_translations"
+  acts_as_tenant(:edition)
 
   include Comfy::Cms::WithFragments
 
@@ -23,7 +24,7 @@ class Comfy::Cms::Translation < ActiveRecord::Base
 
   validates :locale,
     presence:   true,
-    uniqueness: { scope: :page_id }
+    uniqueness: { scope: %i[page_id edition_id] }
 
   validate :validate_locale
 

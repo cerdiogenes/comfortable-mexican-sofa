@@ -27,7 +27,7 @@ class Comfy::Cms::Site < ActiveRecord::Base
     presence:   true
   validates :hostname,
     presence:   true,
-    uniqueness: { scope: [:path, :edition_id] },
+    uniqueness: { scope: %i[path edition_id] },
     format:     { with: %r{\A[\w.-]+(?:\:\d+)?\z} }
 
   # -- Class Methods -----------------------------------------------------------

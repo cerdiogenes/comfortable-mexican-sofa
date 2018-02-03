@@ -23,7 +23,7 @@ class Comfy::Cms::Layout < ActiveRecord::Base
     presence:   true
   validates :identifier,
     presence:   true,
-    uniqueness: { scope: [:site_id, :edition_id] },
+    uniqueness: { scope: %i[site_id edition_id] },
     format:     { with: %r{\A\w[a-z0-9_-]*\z}i }
 
   # -- Class Methods -----------------------------------------------------------
