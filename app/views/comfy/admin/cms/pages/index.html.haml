@@ -1,15 +1,13 @@
+- content_for :right_column do
+  = render "comfy/admin/cms/categories/index", type: "Comfy::Cms::Page"
+
 .page-header
-  = link_to t('.new_link'), new_comfy_admin_cms_site_page_path(@site), :class => 'btn btn-default pull-right'
+  = link_to t('.new_link'), new_comfy_admin_cms_site_page_path(@site), class: "btn btn-secondary float-right"
   %h2= t('.title')
 
-- content_for :right_column do
-  = render 'comfy/admin/cms/sites/mirrors'
-
-= render 'comfy/admin/cms/partials/pages_before'
-
-= render :partial => 'comfy/admin/cms/categories/index', :object => 'Comfy::Cms::Page'
+= comfy_admin_partial "comfy/admin/cms/partials/pages_beforea"
 
 %ul.list.sortable
-  = render :partial => 'index_branch', :collection => @pages
+  = render partial: "index_branch", collection: @pages
 
-= render 'comfy/admin/cms/partials/pages_after'
+= comfy_admin_partial "comfy/admin/cms/partials/pages_after"

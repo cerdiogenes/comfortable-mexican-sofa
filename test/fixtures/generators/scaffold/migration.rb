@@ -1,4 +1,4 @@
-class CreateFoos < ActiveRecord::Migration
+class CreateFoos < ActiveRecord::Migration[5.2]
 
   def change
     create_table :foos do |t|
@@ -6,5 +6,4 @@ class CreateFoos < ActiveRecord::Migration
       t.timestamps
     end
   end
-
 end

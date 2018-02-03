@@ -1,4 +1,3 @@
-# encoding: utf-8
 it:
   activerecord:
     models:
@@ -7,6 +6,7 @@ it:
       comfy/cms/page: Pagina
       comfy/cms/snippet: Snippet
       comfy/cms/file: File
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ it:
         hostname: Indirizzo Host
         path: Percorso
         locale: Lingua
-        is_mirrored: Mirrored
       comfy/cms/layout:
         identifier: Identificatore
         label: Nome Layout
@@ -41,6 +40,11 @@ it:
         label: Etichetta
         identifier: Identificatore
         content: Contenuto
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ it:
       cms:
         base:
           site_not_found: Sito non trovato
-          fixtures_enabled: Le Fixtures CMS sono abilitate. Tutti i cambiamenti fatti qui saranno scartati.
+          seeds_enabled: Le Fixtures CMS sono abilitate. Tutti i cambiamenti fatti qui saranno scartati.
 
           sites: Siti
           layouts: Layout
@@ -84,7 +88,6 @@ it:
             create: Crea sito
             cancel: Cancellare
             update: Modifica sito
-            is_mirrored: Mirrored
 
         layouts:
           created: Layout creato
@@ -106,12 +109,6 @@ it:
             title: Nuovo Layout
           edit:
             title: Modifica Layout
-            revision: &revision
-              zero: '%{count} Revisioni'
-              one: '%{count} Revisione'
-              few: '%{count} Revisioni'
-              many: '%{count} Revisioni'
-              other: '%{count} Revisioni'
           form:
             select_parent_layout: Seleziona Layout padre
             select_app_layout: Seleziona Layout applicazione
@@ -141,20 +138,40 @@ it:
             title: Nuova Pagina
           edit:
             title: Modifica Pagina
-            revision:
-              <<: *revision
           form:
             select_target_page: Nessun reindirizzamento
             preview: Anteprima
             create: Crea Pagina
             cancel: Cancellare
             update: Modifica Pagina
-            is_published: Pubblicata
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Il Layout non ha tag di contenuto definiti.<br/>
-              Modifica il contenuto per includere una pagina o un campo. Per esempio: <code>{{cms:page:content}}</code>
+              Modifica il contenuto per includere una pagina o un campo. Per esempio: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Snippet creato
@@ -174,8 +191,6 @@ it:
             title: Nuovo Snippet
           edit:
             title: Modifica Snippet
-            revision:
-              <<: *revision
           form:
             create: Crea Snippet
             cancel: Cancellare
@@ -189,13 +204,19 @@ it:
           show:
             title: Revisioni per
             revision: Revisione
-            full_path: Percorso intero
-            slug: Slug
             update: Aggiorna a questa revisione
+            cancel: Cancellare
             content: Contenuto
             changes: Cambiamenti
             previous: Precedente
             current: Attuale
+          sidebar:
+            revision:
+              zero: '%{count} Revisioni'
+              one: '%{count} Revisione'
+              few: '%{count} Revisioni'
+              many: '%{count} Revisioni'
+              other: '%{count} Revisioni'
 
         files:
           created: File caricati
@@ -229,10 +250,9 @@ it:
 
         categories:
           index:
-            label: Categorie
             edit: Modifica
             done: Fatto
-            all: Tutte
+            all: Tutte Categorie
             add: Aggiungi
             add_placeholder: Aggiungi categoria
           show:

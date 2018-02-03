@@ -1,4 +1,4 @@
-require 'rails/generators/active_record'
+require "rails/generators/active_record"
 
 module Comfy
   module Generators
@@ -7,45 +7,55 @@ module Comfy
       include Rails::Generators::Migration
       include Thor::Actions
 
-      source_root File.expand_path('../../../../..', __FILE__)
+      source_root File.expand_path("../../../../..", __FILE__)
 
       def generate_migration
-        destination   = File.expand_path('db/migrate/01_create_cms.rb', self.destination_root)
+        destination   = File.expand_path("db/migrate/01_create_cms.rb", destination_root)
         migration_dir = File.dirname(destination)
-        destination   = self.class.migration_exists?(migration_dir, 'create_cms')
+        destination   = self.class.migration_exists?(migration_dir, "create_cms")
 
         if destination
           puts "\e[0m\e[31mFound existing cms_create.rb migration. Remove it if you want to regenerate.\e[0m"
         else
-          migration_template 'db/migrate/01_create_cms.rb', 'db/migrate/create_cms.rb'
+          migration_template "db/migrate/01_create_cms.rb", "db/migrate/create_cms.rb"
         end
       end
 
       def generate_initializer
-        copy_file 'config/initializers/comfortable_mexican_sofa.rb',
-          'config/initializers/comfortable_mexican_sofa.rb'
+        copy_file "config/initializers/comfortable_mexican_sofa.rb",
+          "config/initializers/comfortable_mexican_sofa.rb"
+      end
+
+      def generate_railties_order
+        application <<-RUBY.strip_heredoc
+          # Ensuring that ActiveStorage routes are loaded before Comfy's globbing
+          # route. Without this file serving routes are inaccessible.
+          config.railties_order = [ActiveStorage::Engine, :main_app, :all]
+        RUBY
       end
 
       def generate_routing
-        route_string  = "  comfy_route :cms_admin, :path => '/admin'\n\n"
-        route_string << "  # Make sure this routeset is defined last\n"
-        route_string << "  comfy_route :cms, :path => '/', :sitemap => false\n"
-        route route_string[2..-1]
+        route_string = <<-RUBY.strip_heredoc
+          comfy_route :cms_admin, path: "/admin"
+          # Ensure that this route is defined last
+          comfy_route :cms, path: "/"
+        RUBY
+        route route_string
       end
 
       def generate_cms_seeds
-        directory 'db/cms_fixtures', 'db/cms_fixtures'
+        directory "db/cms_seeds", "db/cms_seeds"
       end
 
       def generate_assets
-        copy_file 'app/assets/javascripts/comfy/admin/cms/custom.js.coffee',
-          'app/assets/javascripts/comfy/admin/cms/custom.js.coffee'
-        copy_file 'app/assets/stylesheets/comfy/admin/cms/custom.sass',
-          'app/assets/stylesheets/comfy/admin/cms/custom.sass'
+        copy_file "app/assets/javascripts/comfy/admin/cms/custom.js.coffee",
+          "app/assets/javascripts/comfy/admin/cms/custom.js.coffee"
+        copy_file "app/assets/stylesheets/comfy/admin/cms/custom.sass",
+          "app/assets/stylesheets/comfy/admin/cms/custom.sass"
       end
 
       def show_readme
-        readme 'lib/generators/comfy/cms/README'
+        readme "lib/generators/comfy/cms/README"
       end
 
       def self.next_migration_number(dirname)

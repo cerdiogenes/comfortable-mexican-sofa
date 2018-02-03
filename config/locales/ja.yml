@@ -1,4 +1,3 @@
-# encoding: utf-8
 ja:
   activerecord:
     models:
@@ -7,6 +6,7 @@ ja:
       comfy/cms/page: ページ
       comfy/cms/snippet: スニペット
       comfy/cms/file: File
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ ja:
         hostname: ホスト名
         path: パス
         locale: 言語
-        is_mirrored: ミラーリング済み
       comfy/cms/layout:
         identifier: Identifier
         label: レイアウト名
@@ -41,6 +40,11 @@ ja:
         identifier: Identifier
         label: ラベル
         content: コンテンツ
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ ja:
       cms:
         base:
           site_not_found: サイトが見つかりません
-          fixtures_enabled: CMS フィクスチャが有効です。 ここでの変更はすべて破棄されます。
+          seeds_enabled: CMS フィクスチャが有効です。 ここでの変更はすべて破棄されます。
 
           sites: サイト
           layouts: レイアウト
@@ -84,7 +88,6 @@ ja:
             create: サイトを作成
             cancel: キャンセル
             update: サイトを更新
-            is_mirrored: ミラーリング済み
 
         layouts:
           created: レイアウトが作成されました
@@ -106,12 +109,6 @@ ja:
             title: 新規レイアウト
           edit:
             title: レイアウトを編集
-            revision: &revision
-              zero: リビジョン
-              one: '%{count} リビジョン'
-              few: '%{count} リビジョン'
-              many: '%{count} リビジョン'
-              other: '%{count} リビジョン'
           form:
             select_parent_layout: 親レイアウトを選択
             select_app_layout: アプリケーションレイアウトを選択
@@ -141,20 +138,40 @@ ja:
             title: 新規ページ
           edit:
             title: ページを編集
-            revision:
-              <<: *revision
           form:
             select_target_page: リダイレクトなし
             preview: プレビュー
             create: ページを作成
             cancel: キャンセル
             update: ページを更新
-            is_published: パブリッシュ済み
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               レイアウトにはコンテンツタグが定義されていません。<br/>
-              コンテンツを編集してページまたはフィールドタグを含めてください。 例:  <code>{{cms:page:content}}</code>
+              コンテンツを編集してページまたはフィールドタグを含めてください。 例:  <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: スニペットが作成されました
@@ -174,8 +191,6 @@ ja:
             title: 新規スニペット
           edit:
             title: スニペットを編集
-            revision:
-              <<: *revision
           form:
             create: スニペットを作成
             cancel: キャンセル
@@ -189,13 +204,19 @@ ja:
           show:
             title: リビジョン
             revision: リビジョン
-            full_path: フルパス
-            slug: スラッグ
             update: このリビジョンに更新
+            cancel: キャンセル
             content: Content
             changes: Changes
             previous: Previous
             current: Current
+          sidebar:
+            revision: &revision
+              zero: リビジョン
+              one: '%{count} リビジョン'
+              few: '%{count} リビジョン'
+              many: '%{count} リビジョン'
+              other: '%{count} リビジョン'
 
         files:
           created: ファイルがアップロードされました
@@ -229,10 +250,9 @@ ja:
 
         categories:
           index:
-            label: カテゴリー
             edit: 編集
             done: 完了
-            all: すべて
+            all: すべて カテゴリー
             add: 追加
             add_placeholder: カテゴリを追加
           show:

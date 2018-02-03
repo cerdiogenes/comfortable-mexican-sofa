@@ -1,4 +1,3 @@
-# encoding: utf-8
 sk:
   activerecord:
     models:
@@ -7,6 +6,7 @@ sk:
       comfy/cms/page: Stránka
       comfy/cms/snippet: Fragment
       comfy/cms/file: Súbor
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ sk:
         hostname: Doména
         path: Cesta
         locale: Jazyk
-        is_mirrored: Zrkadlené
       comfy/cms/layout:
         identifier: Identifikátor
         label: Názov rozloženia
@@ -41,6 +40,11 @@ sk:
         identifier: Identifikátor
         label: Popis
         content: Obsah
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ sk:
       cms:
         base:
           site_not_found: Web nenájdený
-          fixtures_enabled: Sú povolené CMS Fixtures. Všetky tu vykonané zmeny budú stratené.
+          seeds_enabled: Sú povolené CMS Fixtures. Všetky tu vykonané zmeny budú stratené.
 
           sites: Weby
           layouts: Rozloženia
@@ -84,7 +88,6 @@ sk:
             create: Vytvoriť web
             cancel: Zrušiť
             update: Upraviť web
-            is_mirrored: Zrkadlené
 
         layouts:
           created: Rozloženie vytvorené
@@ -106,12 +109,6 @@ sk:
             title: Nové rozloženie
           edit:
             title: Úprava rozloženia
-            revision: &revision
-              zero: Žiadne revízie
-              one: '%{count} revízia'
-              few: '%{count} revízie'
-              many: '%{count} revízií'
-              other: '%{count} revízií'
           form:
             select_parent_layout: Zvoľte nadradené rozloženie
             select_app_layout: Zvoľte rozloženie aplikácie
@@ -141,20 +138,40 @@ sk:
             title: Nová stránka
           edit:
             title: Úprava stránky
-            revision:
-              <<: *revision
           form:
             select_target_page: Bez presmerovania
             preview: Náhľad
             create: Vytvoriť stránku
             cancel: Zrušiť
             update: Upraviť stránku
-            is_published: Zverejnené
             choose_link: Zvoľte stránku...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Rozloženie nemá definované žiadne značky obsahu.<br/>
-              Upravte obsah tak, aby obsahoval značky stránok alebo polí. Napríklad: <code>{{cms:page:content}}</code>
+              Upravte obsah tak, aby obsahoval značky stránok alebo polí. Napríklad: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Fragment vytvorený
@@ -174,8 +191,6 @@ sk:
             title: Nový fragment
           edit:
             title: Upraviť fragment
-            revision:
-              <<: *revision
           form:
             create: Vytvoriť fragment
             cancel: Zrušiť
@@ -189,13 +204,19 @@ sk:
           show:
             title: Revízia pre
             revision: Revízia
-            full_path: Celá cesta
-            slug: Strojový názov
             update: Použiť túto revíziu
+            cancel: Zrušiť
             content: Obsah
             changes: Zmeny
             previous: Predchádzajúca
             current: Súčasná
+          sidebar:
+            revision:
+              zero: Žiadne revízie
+              one: '%{count} revízia'
+              few: '%{count} revízie'
+              many: '%{count} revízií'
+              other: '%{count} revízií'
 
         files:
           created: Súbory nahrané
@@ -229,10 +250,9 @@ sk:
 
         categories:
           index:
-            label: Kategórie
             edit: Upraviť
             done: Hotovo
-            all: Všetky
+            all: Všetky Kategórie
             add: Pridať
             add_placeholder: Pridať kategóriu
           show:

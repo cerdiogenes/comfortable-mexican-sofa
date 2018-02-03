@@ -1,28 +1,25 @@
-# encoding: utf-8
-
-require_relative '../test_helper'
+require_relative "../test_helper"
 
 class ConfigurationTest < ActiveSupport::TestCase
 
   def test_configuration_presence
     assert config = ComfortableMexicanSofa.configuration
-    assert_equal 'ComfortableMexicanSofa CMS Engine', config.cms_title
-    assert_equal 'ApplicationController', config.base_controller
-    assert_equal 'ComfortableMexicanSofa::AccessControl::AdminAuthentication',  config.admin_auth
-    assert_equal 'ComfortableMexicanSofa::AccessControl::AdminAuthorization',   config.admin_authorization
-    assert_equal 'ComfortableMexicanSofa::AccessControl::PublicAuthentication', config.public_auth
-    assert_equal '', config.admin_route_redirect
-    assert_equal false, config.enable_fixtures
-    assert_equal File.expand_path('db/cms_fixtures', Rails.root), config.fixtures_path
+    assert_equal "ComfortableMexicanSofa CMS Engine", config.cms_title
+    assert_equal "ApplicationController", config.base_controller
+    assert_equal "ComfortableMexicanSofa::AccessControl::AdminAuthentication",  config.admin_auth
+    assert_equal "ComfortableMexicanSofa::AccessControl::AdminAuthorization",   config.admin_authorization
+    assert_equal "ComfortableMexicanSofa::AccessControl::PublicAuthentication", config.public_auth
+    assert_equal "", config.admin_route_redirect
+    assert_equal false, config.enable_seeds
+    assert_equal File.expand_path("db/cms_seeds", Rails.root), config.seeds_path
     assert_equal 25, config.revisions_limit
     assert_equal ({
-      'en'    => 'English',
-      'es'    => 'Español'
+      "en"    => "English",
+      "es"    => "Español"
     }), config.locales
     assert_nil config.admin_locale
-    assert_equal ({}), config.upload_file_options
     assert_nil config.admin_cache_sweeper
-    assert_equal false, config.allow_irb
+    assert_equal false, config.allow_erb
     assert_nil config.allowed_helpers
     assert_nil config.allowed_partials
     assert_nil config.allowed_templates
@@ -30,8 +27,8 @@ class ConfigurationTest < ActiveSupport::TestCase
   end
 
   def test_initialization_overrides
-    ComfortableMexicanSofa.configuration.cms_title = 'New Title'
-    assert_equal 'New Title', ComfortableMexicanSofa.configuration.cms_title
+    ComfortableMexicanSofa.configuration.cms_title = "New Title"
+    assert_equal "New Title", ComfortableMexicanSofa.configuration.cms_title
   end
 
   def test_version

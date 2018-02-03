@@ -1,69 +1,55 @@
 class Comfy::Cms::File < ActiveRecord::Base
-  self.table_name = 'comfy_cms_files'
+
+  self.table_name = "comfy_cms_files"
   acts_as_tenant(:edition)
 
-  IMAGE_MIMETYPES = %w(gif jpeg pjpeg png tiff).collect{|subtype| "image/#{subtype}"}
+  include Comfy::Cms::WithCategories
 
-  cms_is_categorized
+  VARIANT_SIZE = {
+    redactor: { resize: "100x75^",   gravity: "center", crop: "100x75+0+0" },
+    thumb:    { resize: "200x150^",  gravity: "center", crop: "200x150+0+0" },
+    icon:     { resize: "28x28^",    gravity: "center", crop: "28x28+0+0" }
+  }.freeze
 
-  attr_accessor :dimensions
+  # temporary place to store attachment
+  attr_accessor :file
 
-  has_attached_file :file, ComfortableMexicanSofa.config.upload_file_options.merge(
-    # dimensions accessor needs to be set before file assignment for this to work
-    :styles => lambda { |f|
-      if f.respond_to?(:instance) && f.instance.respond_to?(:dimensions)
-        (f.instance.dimensions.blank?? { } : { :original => f.instance.dimensions }).merge(
-          :cms_thumb => '100x75#'
-        ).merge(ComfortableMexicanSofa.config.upload_file_options[:styles] || {})
-      end
-    }
-  )
-  before_post_process :is_image?
+  has_one_attached :attachment
 
-  # -- Relationships --------------------------------------------------------
-  belongs_to :site, :optional => true
-  belongs_to :block, :optional => true
+  # -- Relationships -----------------------------------------------------------
+  belongs_to :site
 
-  # -- Validations ----------------------------------------------------------
-  validates :site_id,
-    :presence   => true
-  validates_attachment_presence :file
-  do_not_validate_attachment_file_type :file
-
-  validates :file_file_name,
-    :uniqueness => {:scope => [:site_id, :block_id, :edition_id]}
-
-  # -- Callbacks ------------------------------------------------------------
-  before_save   :assign_label
+  # -- Callbacks ---------------------------------------------------------------
   before_create :assign_position
-  after_save    :reload_blockable_cache
-  after_destroy :reload_blockable_cache
+  after_save :process_attachment
 
-  # -- Scopes ---------------------------------------------------------------
-  scope :not_page_file, -> { where(:block_id => nil)}
-  scope :images,        -> { where(:file_content_type => IMAGE_MIMETYPES) }
-  scope :not_images,    -> { where('file_content_type NOT IN (?)', IMAGE_MIMETYPES) }
+  # -- Validations -------------------------------------------------------------
+  validates :file, presence: true, on: :create
 
-  # -- Instance Methods -----------------------------------------------------
-  def is_image?
-    IMAGE_MIMETYPES.include?(file_content_type)
+  # -- Scopes ------------------------------------------------------------------
+  # When we need to grab only files with image attachments.
+  # Don't forget to include `with_attached_attachment` before calling this
+  scope :with_images, -> {
+    where("active_storage_blobs.content_type LIKE 'image/%'").references(:blob)
+  }
+
+  # -- Instance Methods --------------------------------------------------------
+  def label
+    l = read_attribute(:label)
+    return l if l.present?
+    attachment.attached? ? attachment.filename.to_s : nil
   end
 
 protected
-
-  def assign_label
-    self.label = self.label.blank?? self.file_file_name.gsub(/\.[^\.]*?$/, '').titleize : self.label
-  end
 
   def assign_position
     max = Comfy::Cms::File.maximum(:position)
     self.position = max ? max + 1 : 0
   end
 
-  def reload_blockable_cache
-    return unless self.block
-    b = self.block.blockable
-    b.class.name.constantize.where(:id => b.id).update_all(:content_cache => nil)
+  def process_attachment
+    return if @file.blank?
+    attachment.attach(@file)
   end
 
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 cs:
   activerecord:
     models:
@@ -7,6 +6,7 @@ cs:
       comfy/cms/page: Stránka
       comfy/cms/snippet: Úryvek
       comfy/cms/file: Soubor
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ cs:
         hostname: Doména
         path: Cesta
         locale: Jazyk
-        is_mirrored: Zrcadlený
       comfy/cms/layout:
         identifier: Identifikátor
         label: Název rozložení
@@ -41,6 +40,11 @@ cs:
         identifier: Identifikátor
         label: Popis
         content: Obsah
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ cs:
       cms:
         base:
           site_not_found: Web nenalezen
-          fixtures_enabled: Je povolen pevně definovaný obsah CMS. Všechny zde provedené změny budou ztraceny.
+          seeds_enabled: Je povolen pevně definovaný obsah CMS. Všechny zde provedené změny budou ztraceny.
 
           sites: Weby
           layouts: Rozložení
@@ -84,7 +88,6 @@ cs:
             create: Vytvořit web
             cancel: Zrušit
             update: Upravit web
-            is_mirrored: Zrcadlený
 
         layouts:
           created: Rozložení vytvořeno
@@ -106,12 +109,6 @@ cs:
             title: Nové rozložení
           edit:
             title: Úprava rozložení
-            revision: &revision
-              zero: Žádné revize
-              one: '%{count} revize'
-              few: '%{count} revize'
-              many: '%{count} revizí'
-              other: '%{count} revizí'
           form:
             select_parent_layout: Zvolte rodičovské rozložení
             select_app_layout: Zvolte rozložení aplikace
@@ -141,20 +138,40 @@ cs:
             title: Nová stránka
           edit:
             title: Úprava stránky
-            revision:
-              <<: *revision
           form:
             select_target_page: Bez přesměrování
             preview: Náhled
             create: Vytvořit stránku
             cancel: Zrušit
             update: Upravit stránku
-            is_published: Publikovaná
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Rozložení nedefinuje žádné obsahové značky.<br/>
-              Upravte jeho obsah tak, aby zahrnovalo obsahové značky. Například: <code>{{cms:page:content}}</code>
+              Upravte jeho obsah tak, aby zahrnovalo obsahové značky. Například: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Úryvek vytvořen
@@ -174,8 +191,6 @@ cs:
             title: Nový úryvek
           edit:
             title: Upravit úryvek
-            revision:
-              <<: *revision
           form:
             create: Vytvořit úryvek
             cancel: Zrušit
@@ -189,13 +204,19 @@ cs:
           show:
             title: Revize pro
             revision: Revize
-            full_path: Celá cesta
-            slug: Slug
             update: Použít tuto revizi
+            cancel: Zrušit
             content: Obsah
             changes: Změny
             previous: Předchozí
             current: Aktuální
+          sidebar:
+            revision:
+              zero: Žádné revize
+              one: '%{count} revize'
+              few: '%{count} revize'
+              many: '%{count} revizí'
+              other: '%{count} revizí'
 
         files:
           created: Soubory nahrány
@@ -229,10 +250,9 @@ cs:
 
         categories:
           index:
-            label: Kategorie
             edit: Upravit
             done: Hotovo
-            all: Všechny
+            all: Všechny Kategorie
             add: Přidat
             add_placeholder: Přidat kategorii
           show:

@@ -1,4 +1,3 @@
-# encoding: utf-8
 ru:
   activerecord:
     models:
@@ -7,6 +6,7 @@ ru:
       comfy/cms/page: Страница
       comfy/cms/snippet: Сниппет
       comfy/cms/file: Файл
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ ru:
         hostname: Имя хоста
         path: Путь
         locale: Язык
-        is_mirrored: Синхронизирован с другими сайтами
       comfy/cms/layout:
         identifier: Идентификатор
         label: Название шаблона
@@ -41,6 +40,11 @@ ru:
         identifier: Идентификатор
         label: Название
         content: Контент
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ ru:
       cms:
         base:
           site_not_found: Сайт не найден
-          fixtures_enabled: CMS Fixtures включены. Все изменения, сделанные здесь, будут отменены.
+          seeds_enabled: CMS Fixtures включены. Все изменения, сделанные здесь, будут отменены.
 
           sites: Сайты
           layouts: Шаблоны
@@ -84,7 +88,6 @@ ru:
             create: Создать сайт
             cancel: Oтменить
             update: Обновить сайт
-            is_mirrored: Синхронизирован с другими сайтами
 
         layouts:
           created: Шаблон создан
@@ -106,12 +109,6 @@ ru:
             title: Новый шаблон
           edit:
             title: Редактирование шаблона
-            revision: &revision
-              zero: 'Нет Ревизий'
-              one: '%{count} Ревизия'
-              few: '%{count} Ревизии'
-              many: '%{count} Ревизий'
-              other: '%{count} Ревизии'
           form:
             select_parent_layout: Выбрать родительский шаблон
             select_app_layout: Выбрать шаблон приложения
@@ -141,20 +138,40 @@ ru:
             title: Новая страница
           edit:
             title: Редактирование страницы
-            revision:
-              <<: *revision
           form:
             select_target_page: Без редиректа
             preview: Предпросмотр
             create: Создать страницу
             cancel: Oтменить
             update: Обновить страницу
-            is_published: Опубликована
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Шаблон не содержит ни одного контент-тега.<br/>
-              Отредактируйте контент, вставив тег страницы или поля. Например: <code>{{cms:page:content}}</code>
+              Отредактируйте контент, вставив тег страницы или поля. Например: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Сниппет создан
@@ -174,8 +191,6 @@ ru:
             title: Новый сниппет
           edit:
             title: Редактирование сниппета
-            revision:
-              <<: *revision
           form:
             create: Создать сниппет
             cancel: Oтменить
@@ -189,13 +204,19 @@ ru:
           show:
             title: Ревизии для
             revision: Ревизия
-            full_path: Полный путь
-            slug: Ссылка
             update: Обновить до этой ревизии
+            cancel: Oтменить
             content: Content
             changes: Changes
             previous: Previous
             current: Текущая
+          sidebar:
+            revision:
+              zero: 'Нет Ревизий'
+              one: '%{count} Ревизия'
+              few: '%{count} Ревизии'
+              many: '%{count} Ревизий'
+              other: '%{count} Ревизии'
 
         files:
           created: Файлы загружены
@@ -229,10 +250,9 @@ ru:
 
         categories:
           index:
-            label: Категории
             edit: Редактировать
             done: Применить
-            all: Все
+            all: Все Категории
             add: Добавить
             add_placeholder: добавить категорию
           show:

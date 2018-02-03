@@ -1,17 +1,15 @@
 class Comfy::Cms::Categorization < ActiveRecord::Base
-  self.table_name = 'comfy_cms_categorizations'
+
+  self.table_name = "comfy_cms_categorizations"
   acts_as_tenant(:edition)
-  
-  # -- Relationships --------------------------------------------------------
-  belongs_to :category, :optional => true
+
+  # -- Relationships -----------------------------------------------------------
+  belongs_to :category
   belongs_to :categorized,
-    :polymorphic => true, :optional => true
-    
-  # -- Validations ----------------------------------------------------------
-  validates :categorized_type, :categorized_id,
-    :presence   => true
+    polymorphic: true
+
+  # -- Validations -------------------------------------------------------------
   validates :category_id,
-    :presence   => true,
-    :uniqueness => { :scope => [:categorized_type, :categorized_id, :edition_id] }
-  
+    uniqueness: { scope: %i[categorized_type categorized_id edition_id] }
+
 end

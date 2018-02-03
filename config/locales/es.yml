@@ -1,4 +1,3 @@
-# encoding: utf-8
 es:
   activerecord:
     models:
@@ -7,6 +6,7 @@ es:
       comfy/cms/page: Página
       comfy/cms/snippet: Fragmento
       comfy/cms/file: File
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ es:
         hostname: Dirección
         path: Ruta
         locale: Lengua
-        is_mirrored: Espejo
       comfy/cms/layout:
         identifier: Identifier
         label: Nombre de Plantilla
@@ -41,6 +40,11 @@ es:
         label: Nombre
         identifier: Identifier
         content: Contenido
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ es:
       cms:
         base:
           site_not_found: Sitio no encontrado
-          fixtures_enabled: CMS Fixtures habilitadas. Todos los cambios realizados serán descartados.
+          seeds_enabled: CMS Fixtures habilitadas. Todos los cambios realizados serán descartados.
 
           sites: Sitios
           layouts: Diseños
@@ -84,7 +88,6 @@ es:
             create: Crear Sitio
             cancel: Cancelar
             update: Actualizar Sitio
-            is_mirrored: Espejo
 
         layouts:
           created: Diseño Creado
@@ -106,12 +109,6 @@ es:
             title: Nuevo Diseño
           edit:
             title: Editando Diseño
-            revision: &revision
-              zero: No Revisions
-              one: '%{count} Revision'
-              few: '%{count} Revisions'
-              many: '%{count} Revisions'
-              other: '%{count} Revisions'
           form:
             select_parent_layout: Seleccionar diseño padre
             select_app_layout: Seleccionar diseño (App)
@@ -141,20 +138,40 @@ es:
             title: Nueva Página
           edit:
             title: Editando Página
-            revision:
-              <<: *revision
           form:
             select_target_page: No Redirigir
             preview: Vista Previa
             create: Crear Página
             cancel: Cancelar
             update: Actualizar Página
-            is_published: Publicada
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               La plantilla no tiene etiquetas de contenido definidas.<br/>
-              Edite el contenido para incluir alguna etiqueta de página o campo, por ejemplo: <code>{{cms:page:content}}</code>
+              Edite el contenido para incluir alguna etiqueta de página o campo, por ejemplo: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Fragmento creado
@@ -174,8 +191,6 @@ es:
             title: Nuevo Fragmento
           edit:
             title: Editando Fragmento
-            revision:
-              <<: *revision
           form:
             create: Crear Fragmento
             cancel: Cancelar
@@ -189,13 +204,19 @@ es:
           show:
             title: Revisiones de
             revision: Revisión
-            full_path: Ruta completa
-            slug: Identificador
             update: Actualizar a esta versión
+            cancel: Cancelar
             content: Content
             changes: Changes
             previous: Previous
             current: Corriente
+          sidebar:
+            revision:
+              zero: No Revisions
+              one: '%{count} Revision'
+              few: '%{count} Revisions'
+              many: '%{count} Revisions'
+              other: '%{count} Revisions'
 
         files:
           created: Archivos subidos
@@ -229,10 +250,9 @@ es:
 
         categories:
           index:
-            label: Categorias
             edit: Editar
             done: Listo
-            all: Todos
+            all: Todos Categorias
             add: Agregar
             add_placeholder: Añadir Categoría
           show:

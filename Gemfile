@@ -1,23 +1,24 @@
-source 'http://rubygems.org'
+source "http://rubygems.org"
 
 gemspec
 
-# apps can also use will_paginate so there's no dependency in gemspec
-gem 'kaminari'
+group :development, :test do
+  gem "byebug", platforms: %i[mri mingw x64_mingw]
+  gem "capybara"
+  gem "kaminari"
+  gem "puma"
+  gem "rubocop", require: false
+  gem "selenium-webdriver"
+  gem "sqlite3"
+end
 
 group :development do
-  gem 'awesome_print'
-  gem 'better_errors'
-  gem 'binding_of_caller'
+  gem "listen"
+  gem "web-console"
 end
 
 group :test do
-  gem 'rails-controller-testing'
-
-  gem 'sqlite3',                          :platform => [:ruby, :mswin, :mingw]
-  gem 'jdbc-sqlite3',                     :platform => :jruby
-  gem 'activerecord-jdbcsqlite3-adapter', :platform => :jruby
-
-  gem 'mocha',      :require => false
-  gem 'coveralls',  :require => false
+  gem "coveralls",  require: false
+  gem "mocha",      require: false
+  gem "rails-controller-testing"
 end

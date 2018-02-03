@@ -1,4 +1,3 @@
-# encoding: utf-8
 tr:
   activerecord:
     models:
@@ -7,6 +6,7 @@ tr:
       comfy/cms/page: Sayfa
       comfy/cms/snippet: Pasaj
       comfy/cms/file: Dosya
+      comfy/cms/translation: Çeviri
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ tr:
         hostname: Sunucu Adı
         path: Yol
         locale: Dil
-        is_mirrored: Mirrored
       comfy/cms/layout:
         identifier: Tanımlayıcı
         label: Şablon Adı
@@ -41,6 +40,11 @@ tr:
         label: Etiket
         identifier: Tanımlayıcı
         content: İçerik
+      comfy/cms/translation:
+        locale: Dil
+        label: Etiket
+        layout_id: Şablon
+        is_published: Yayında mı?
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ tr:
       cms:
         base:
           site_not_found: Site Bulunamadı
-          fixtures_enabled: CMS Fixtures are enabled. All changes done here will be discarded.
+          seeds_enabled: CMS Fixtures etkinleştirildi. Burada yapılan değişiklikler kullanılmayacak.
 
           sites: Siteler
           layouts: Şablonlar
@@ -84,7 +88,6 @@ tr:
             create: Siteyi Oluştur
             cancel: İptal
             update: Siteyi Güncelle
-            is_mirrored: Mirrored
 
         layouts:
           created: Şablon oluşturuldu
@@ -106,12 +109,6 @@ tr:
             title: Yeni Şablon
           edit:
             title: Şablon Düzenleniyor
-            revision: &revision
-              zero: Revize Yok
-              one: '%{count} Revizyon'
-              few: '%{count} Revizyon'
-              many: '%{count} Revizyon'
-              other: '%{count} Revizyon'
           form:
             select_parent_layout: Üst Şablon Seç
             select_app_layout: Uygulama Şablonu Seç
@@ -141,20 +138,40 @@ tr:
             title: Yeni Sayfa
           edit:
             title: Sayfa Düzenleniyor
-            revision:
-              <<: *revision
           form:
             select_target_page: Yönlendirme Yok
             preview: Önizle
             create: Sayfa Oluştur
             cancel: İptal
             update: Sayfayı Güncelle
-            is_published: Yayınlandı
             choose_link: Sayfa Seç...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Şablon etiket içermiyor.<br/>
-              Lütfen bir etiket ekleyin. Örnek: <code>{{cms:page:content}}</code>
+              Lütfen bir etiket ekleyin. Örnek: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Çeviri oluşturuldu
+          creation_failure: Çeviri oluşturulamadı
+          updated: Çeviri güncellendi
+          update_failure: Çeviri güncellenemedi
+          deleted: Çeviri silindi
+          not_found: Çeviri bulunamadı
+
+          new:
+            title: Yeni Çeviri
+          edit:
+            title: Çeviri Düzenleniyor
+          form:
+            preview: Önizleme
+            create: Oluştur
+            update: Güncelle
+            cancel: Sayfaya Geri Dön
+          sidebar:
+            new: Yeni Çeviri
+            confirm: Emin Misin?
 
         snippets:
           created: Pasaj oluşturuldu
@@ -174,8 +191,6 @@ tr:
             title: Yeni Pasaj
           edit:
             title: Pasaj Düzenleniyor
-            revision:
-              <<: *revision
           form:
             create: Pasaj Oluştur
             cancel: İptal
@@ -189,13 +204,19 @@ tr:
           show:
             title: Revizeler
             revision: Revizyon
-            full_path: Tam Yol
-            slug: Slug
             update: Bu revizyona Güncelle
+            cancel: İptal
             content: İçerik
             changes: Değişiklikler
             previous: Önceki
             current: Şimdiki
+          sidebar:
+            revision:
+              zero: Revize Yok
+              one: '%{count} Revizyon'
+              few: '%{count} Revizyon'
+              many: '%{count} Revizyon'
+              other: '%{count} Revizyon'
 
         files:
           created: Dosyalar yüklendi
@@ -229,10 +250,9 @@ tr:
 
         categories:
           index:
-            label: Kategoriler
             edit: Düzenle
             done: Tamam
-            all: Hepsi
+            all: Hepsi Kategoriler
             add: Ekle
             add_placeholder: Kategori Ekle
           show:

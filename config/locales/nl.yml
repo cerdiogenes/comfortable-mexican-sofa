@@ -1,4 +1,3 @@
-# encoding: utf-8
 nl:
   activerecord:
     models:
@@ -7,6 +6,7 @@ nl:
       comfy/cms/page: Pagina
       comfy/cms/snippet: Snippet
       comfy/cms/file: Bestand
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ nl:
         hostname: Hostname
         path: Pad
         locale: Taal
-        is_mirrored: Gespiegeld
       comfy/cms/layout:
         identifier: Identifier
         label: Lay-out Naam
@@ -41,6 +40,11 @@ nl:
         identifier: Identifier
         label: Label
         content: Inhoud
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ nl:
       cms:
         base:
           site_not_found: Site niet gevonden
-          fixtures_enabled: CMS Fixtures zijn ingeschakeld. Alle veranderingen die hier gedaan zijn worden weggegooid.
+          seeds_enabled: CMS Fixtures zijn ingeschakeld. Alle veranderingen die hier gedaan zijn worden weggegooid.
 
           sites: Sites
           layouts: Lay-outs
@@ -84,7 +88,6 @@ nl:
             create: Site Aanmaken
             cancel: Annuleren
             update: Site Bijwerken
-            is_mirrored: Gespiegeld
 
         layouts:
           created: Lay-out aangemaakt
@@ -106,12 +109,6 @@ nl:
             title: Nieuwe Lay-out
           edit:
             title: Lay-out Bewerken
-            revision: &revision
-              zero: '%{count} Revisies'
-              one: '%{count} Revisie'
-              few: '%{count} Revisies'
-              many: '%{count} Revisies'
-              other: '%{count} Revisies'
           form:
             select_parent_layout: Selecteer Ouder Lay-out
             select_app_layout: Selecteer Applicatie Lay-out
@@ -141,20 +138,40 @@ nl:
             title: Nieuwe Pagina
           edit:
             title: Pagina Bewerken
-            revision:
-              <<: *revision
           form:
             select_target_page: Geen Omleiding
             preview: Preview
             create: Pagina Aanmaken
             cancel: Annuleren
             update: Pagina Bijwerken
-            is_published: Gepubliceerd
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Lay-out heeft geen inhoud-tags gedefinieerd.<br/>
-              Bewerk de inhoud van de lay-out om een inhoud-tag toe te voegen. Bijvoorbeeld: <code>{{cms:page:content}}</code>
+              Bewerk de inhoud van de lay-out om een inhoud-tag toe te voegen. Bijvoorbeeld: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Snippet aangemaakt
@@ -174,8 +191,6 @@ nl:
             title: Nieuw Snippet
           edit:
             title: Snippet Bewerken
-            revision:
-              <<: *revision
           form:
             create: Snippet Aanmaken
             cancel: Annuleren
@@ -189,13 +204,19 @@ nl:
           show:
             title: Revisies van
             revision: Revisie
-            full_path: Volledig Pad
-            slug: Slug
             update: Zet terug naar deze Revisie
+            cancel: Annuleren
             content: Content
             changes: Changes
             previous: Previous
             current: Huidig
+          sidebar:
+            revision:
+              zero: '%{count} Revisies'
+              one: '%{count} Revisie'
+              few: '%{count} Revisies'
+              many: '%{count} Revisies'
+              other: '%{count} Revisies'
 
         files:
           created: Bestanden geüpload
@@ -229,10 +250,9 @@ nl:
 
         categories:
           index:
-            label: Categorieën
             edit: Bewerk
             done: Klaar
-            all: Alle
+            all: Alle Categorieën
             add: Toevoegen
             add_placeholder: Categorie Toevoegen
           show:

@@ -1,4 +1,3 @@
-# encoding: utf-8
 uk:
   activerecord:
     models:
@@ -7,6 +6,7 @@ uk:
       comfy/cms/page: Сторінка
       comfy/cms/snippet: Сніппет
       comfy/cms/file: Файл
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ uk:
         hostname: Ім'я хоста
         path: Шлях
         locale: Мова
-        is_mirrored: Синхронізований з іншими сайтами
       comfy/cms/layout:
         identifier: Ідентифікатор
         label: Назва шаблону
@@ -41,6 +40,11 @@ uk:
         identifier: Ідентифікатор
         label: Назва
         content: Зміст
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ uk:
       cms:
         base:
           site_not_found: Сайт не знайдено
-          fixtures_enabled: CMS Fixtures ввімкнені. Всі зміни, зроблені тут, будуть скасовані.
+          seeds_enabled: CMS Fixtures ввімкнені. Всі зміни, зроблені тут, будуть скасовані.
 
           sites: Сайти
           layouts: Шаблони
@@ -84,7 +88,6 @@ uk:
             create: Створити сайт
             cancel: Cкасувати
             update: Оновити сайт
-            is_mirrored: Синхронізований
 
         layouts:
           created: Шаблон створено
@@ -106,12 +109,6 @@ uk:
             title: Новий шаблон
           edit:
             title: Редагувати шаблон
-            revision: &revision
-              zero: Нeмa Ревізій
-              one: '%{count} Ревізія'
-              few: '%{count} Ревізій'
-              many: '%{count} Ревізій'
-              other: '%{count} Ревізій'
           form:
             select_parent_layout: Вибрати батьківский шаблон
             select_app_layout: Вибрати шаблон додатку
@@ -141,20 +138,40 @@ uk:
             title: Нова сторінка
           edit:
             title: Редагування сторінки
-            revision:
-              <<: *revision
           form:
             select_target_page: Без редіректу
             preview: Передперегляд
             create: Створити сторінку
             cancel: Cкасувати
             update: Оновити сторінку
-            is_published: Опублікована
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Шаблон не містить жодного контент-тега. <br/>
-              Відредагуйте контент, вставивши тег сторінки або поля. Наприклад: <code>{{cms:page:content}}</code>
+              Відредагуйте контент, вставивши тег сторінки або поля. Наприклад: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Сніппет створено
@@ -174,8 +191,6 @@ uk:
             title: Новий сніппет
           edit:
             title: Редагувати сніппет
-            revision:
-              <<: *revision
           form:
             create: Створити сніппет
             cancel: Cкасувати
@@ -189,13 +204,19 @@ uk:
           show:
             title: Ревізія для
             revision: Ревізія
-            full_path: Повний Шлях
-            slug: Посилання
             update: Оновити до цієї ревізії
+            cancel: Cкасувати
             content: Зміст
             changes: Зміни
             previous: Попередній
             current: Поточний
+          sidebar:
+            revision:
+              zero: Нeмa Ревізій
+              one: '%{count} Ревізія'
+              few: '%{count} Ревізій'
+              many: '%{count} Ревізій'
+              other: '%{count} Ревізій'
 
         files:
           created: Файли завантажені
@@ -229,10 +250,9 @@ uk:
 
         categories:
           index:
-            label: Категорії
             edit: Редагувати
             done: Зроблено
-            all: Всі
+            all: Всі Категорії
             add: Додати
             add_placeholder: Додати Категорію
           show:

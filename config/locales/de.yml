@@ -1,4 +1,3 @@
-# encoding: utf-8
 de:
   activerecord:
     models:
@@ -7,6 +6,7 @@ de:
       comfy/cms/page: Seite
       comfy/cms/snippet: Schnipsel
       comfy/cms/file: Datei
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ de:
         hostname: Hostname
         path: Pfad
         locale: Sprache
-        is_mirrored: Gespiegelt
       comfy/cms/layout:
         identifier: Eindeutiger Name
         label: Name
@@ -41,6 +40,11 @@ de:
         identifier: Eindeutiger Name
         label: Bezeichnung
         content: Inhalt
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ de:
       cms:
         base:
           site_not_found: Fehler
-          fixtures_enabled: Fixtures sind aktiviert - alle Änderungen werden verworfen!
+          seeds_enabled: Fixtures sind aktiviert - alle Änderungen werden verworfen!
 
           sites: Webs
           layouts: Layouts
@@ -84,7 +88,6 @@ de:
             create: Web erstellen
             cancel: Abbrechen
             update: Web speichern
-            is_mirrored: Gespiegelt
 
         layouts:
           created: Layout erstellt
@@ -106,12 +109,6 @@ de:
             title: Neues Layout
           edit:
             title: Layout bearbeiten
-            revision: &revision
-              zero: Keine Versionen
-              one: '%{count} Version'
-              few: '%{count} Versionen'
-              many: '%{count} Versionen'
-              other: '%{count} Versionen'
           form:
             select_parent_layout: Übergeordnetes Layout auswählen
             select_app_layout: Grundlegendes Layout auswählen
@@ -141,20 +138,40 @@ de:
             title: Seite erstellen
           edit:
             title: Seite bearbeiten
-            revision:
-              <<: *revision
           form:
             select_target_page: Keine Weiterleitung
             preview: Vorschau
             create: Seite erstellen
             cancel: Abbrechen
             update: Seite speichern
-            is_published: Veröffentlicht
             choose_link: Seite auswählen...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Das gewählte Layout hat kein Comfy-Tags deklariert, daher kann diese Seite nicht bearbeitet werden.<br/>
-              Beispiel: <code>{{ cms:page:content }}</code>
+              Beispiel: <code>{{ cms:wysiwyg content }}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Schnipsel erstellt
@@ -174,8 +191,6 @@ de:
             title: Schnipsel erstellen
           edit:
             title: Schnipsel bearbeiten
-            revision:
-              <<: *revision
           form:
             create: Schnipsel erstellen
             cancel: Abbrechen
@@ -189,13 +204,19 @@ de:
           show:
             title: Versionen von
             revision: Version
-            full_path: Vollständiger Pfad
-            slug: URL
             update: Zurücksetzen auf gewählte Version
+            cancel: Abbrechen
             content: Inhalt
             changes: Änderungen
             previous: Vorherige Version
             current: Aktuell
+          sidebar:
+            revision:
+              zero: Keine Versionen
+              one: '%{count} Version'
+              few: '%{count} Versionen'
+              many: '%{count} Versionen'
+              other: '%{count} Versionen'
 
         files:
           created: Datei hochgeladen
@@ -229,10 +250,9 @@ de:
 
         categories:
           index:
-            label: Kategorien
             edit: Bearbeiten
             done: Erledigt
-            all: Alle
+            all: Alle Kategorien
             add: Hinzuzufügen
             add_placeholder: Kategorie hinzuzufügen
           show:

@@ -5,34 +5,33 @@ class Comfy::Cms::BaseController < ApplicationController
 protected
 
   def load_cms_site
-    @cms_site ||= if params[:site_id]
-      ::Comfy::Cms::Site.find_by_id(params[:site_id])
-    else
-      ::Comfy::Cms::Site.find_site(request.host_with_port.downcase, request.fullpath)
-    end
+    @cms_site ||=
+      if params[:site_id]
+        ::Comfy::Cms::Site.find_by_id(params[:site_id])
+      else
+        ::Comfy::Cms::Site.find_site(request.host_with_port.downcase, request.fullpath)
+      end
 
     if @cms_site
       if @cms_site.path.present? && !params[:site_id]
-        event = Event.find_by(acronym: params[:acronym])
+        event = Event.find_by(acronym: params[:slug].upcase)
         edition = event.editions.find_by(path: params[:path])
         if edition.nil?
           params[:cms_path] = params[:path] if params[:path].present?
           edition = event.editions.last
         end
-        cms_path  = "#{event.acronym}/#{edition.path}"
+        cms_path  = "#{event.slug}/#{edition.path}"
         cms_path += "/#{params[:cms_path]}" if params[:cms_path].present?
         params[:cms_path] = cms_path
-        if params[:cms_path] && params[:cms_path].match(/\A#{@cms_site.path}/)
-          params[:cms_path].gsub!(/\A#{@cms_site.path}/, '')
-          params[:cms_path] && params[:cms_path].gsub!(/\A\//, '')
+        if params[:cms_path] && params[:cms_path].match(%r{\A#{@cms_site.path}})
+          params[:cms_path].gsub!(%r{\A#{@cms_site.path}}, "")
+          params[:cms_path] && params[:cms_path].gsub!(%r{\A/}, "")
         else
-          raise ActionController::RoutingError.new('Site Not Found')
+          raise ActionController::RoutingError, "Site Not Found"
         end
       end
-      I18n.locale = @locale = @cms_site.locale.to_sym
     else
-      I18n.locale = @locale = I18n.default_locale
-      raise ActionController::RoutingError.new('Site Not Found')
+      raise ActionController::RoutingError, "Site Not Found"
     end
   end
 

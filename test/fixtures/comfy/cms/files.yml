@@ -1,9 +1,5 @@
 default:
   site: default
-  block:
-  label: Default File
-  file_file_name: sample.jpg
-  file_content_type: image/jpeg
-  file_file_size: 20099
-  description: Default Description
+  label: default file
+  description: default description
   position: 0

@@ -1,4 +1,3 @@
-# encoding: utf-8
 da:
   activerecord:
     models:
@@ -7,6 +6,7 @@ da:
       comfy/cms/page: Side
       comfy/cms/snippet: Snippet
       comfy/cms/file: Fil
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ da:
         hostname: Værtsnavn
         path: Sti
         locale: Sprog
-        is_mirrored: Kopieret
       comfy/cms/layout:
         identifier: Nøgleord
         label: Layout Navn
@@ -41,6 +40,11 @@ da:
         identifier: Nøgleord
         label: Etiket
         content: Indhold
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ da:
       cms:
         base:
           site_not_found: Webstedet findes ikke
-          fixtures_enabled: CMS Fixtures er slået til. Alle ændringer til blive ignoreret.
+          seeds_enabled: CMS Fixtures er slået til. Alle ændringer til blive ignoreret.
 
           sites: Websteder
           layouts: Layouts
@@ -84,7 +88,6 @@ da:
             create: Opret websted
             cancel: Annuller
             update: Opdater websted
-            is_mirrored: Kopieret websted
 
         layouts:
           created: Layout oprettet
@@ -106,12 +109,6 @@ da:
             title: Nyt layout
           edit:
             title: Rdiger layout
-            revision: &revision
-              zero: Ingen revisioner
-              one: '%{count} revision'
-              few: '%{count} revisioner'
-              many: '%{count} revisioner'
-              other: '%{count} revisioner'
           form:
             select_parent_layout: Vælg overordnet layout
             select_app_layout: Vælg applikationens layout
@@ -141,20 +138,40 @@ da:
             title: Ny side
           edit:
             title: Rediger side
-            revision:
-              <<: *revision
           form:
             select_target_page: Ingen viderestilling
             preview: Preview
             create: Opret side
             cancel: Annuller
             update: Opdater side
-            is_published: Udgivet
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Layout har ingen indholdtags defineret.<br/>
-              Rediger indholdet for at inkluderere et side- eller felttag. Eksempelvis: <code>{{cms:page:content}}</code>
+              Rediger indholdet for at inkluderere et side- eller felttag. Eksempelvis: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Snippet oprettet
@@ -174,8 +191,6 @@ da:
             title: Ny snippet
           edit:
             title: Rediger snippet
-            revision:
-              <<: *revision
           form:
             create: Opret snippet
             cancel: Annuller
@@ -189,13 +204,19 @@ da:
           show:
             title: Revisioner for
             revision: Revision
-            full_path: Fuld sti
-            slug: Slug
             update: Opdater til denne revision
+            cancel: Annuller
             content: Indhold
             changes: Ændringer
             previous: Forrige
             current: Nuværende
+          sidebar:
+            revision:
+              zero: Ingen revisioner
+              one: '%{count} revision'
+              few: '%{count} revisioner'
+              many: '%{count} revisioner'
+              other: '%{count} revisioner'
 
         files:
           created: Filer sendt
@@ -229,10 +250,9 @@ da:
 
         categories:
           index:
-            label: Kategorier
             edit: Rediger
             done: Udført
-            all: Alle
+            all: Alle Kategorier
             add: Tilføj
             add_placeholder: Tilføj kategori
           show:

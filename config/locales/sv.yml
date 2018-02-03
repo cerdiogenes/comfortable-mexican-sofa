@@ -1,4 +1,3 @@
-# encoding: utf-8
 sv:
   activerecord:
     models:
@@ -7,6 +6,7 @@ sv:
       comfy/cms/page: Sida
       comfy/cms/snippet: Snippet
       comfy/cms/file: Fil
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ sv:
         hostname: Hostnamn
         path: Sökväg
         locale: Språk
-        is_mirrored: Speglad
       comfy/cms/layout:
         identifier: Identifierare
         label: Layout Namn
@@ -41,6 +40,11 @@ sv:
         identifier: Identifierare
         label: Label
         content: Innehåll
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ sv:
       cms:
         base:
           site_not_found: Site kan inte hittas
-          fixtures_enabled: CMS Fixtures är aktiverade. Inga ändringar kommer att sparas.
+          seeds_enabled: CMS Fixtures är aktiverade. Inga ändringar kommer att sparas.
 
           sites: Sites
           layouts: Layouter
@@ -84,7 +88,6 @@ sv:
             create: Skapa Site
             cancel: Avbryt
             update: Uppdatera Site
-            is_mirrored: Speglad
 
         layouts:
           created: Layout skapad
@@ -106,12 +109,6 @@ sv:
             title: Ny layout
           edit:
             title: Ändra layout
-            revision: &revision
-              zero: No Revisions
-              one: '%{count} Revision'
-              few: '%{count} Revisions'
-              many: '%{count} Revisions'
-              other: '%{count} Revisions'
           form:
             select_parent_layout: Välj överordnad layout
             select_app_layout: Väl Applikationslayout
@@ -141,20 +138,40 @@ sv:
             title: Ny sida
           edit:
             title: Ändra sida
-            revision:
-              <<: *revision
           form:
             select_target_page: Ingen vidarebefodring
             preview: Förhandsgranska
             create: Skapa sida
             cancel: Avbryt
             update: Uppdatera sida
-            is_published: Publicerad
             choose_link: Välj sida...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Layout har inga innehållstaggar definierade.<br/>
-              Ändra innehållet så att det innehåller en sid eller fält tagg. Exempelvis: <code>{{cms:page:content}}</code>
+              Ändra innehållet så att det innehåller en sid eller fält tagg. Exempelvis: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Snippet skapad
@@ -174,8 +191,6 @@ sv:
             title: Ny Snippet
           edit:
             title: Ändra Snippet
-            revision:
-              <<: *revision
           form:
             create: Skapa Snippet
             cancel: Avbryt
@@ -189,13 +204,19 @@ sv:
           show:
             title: Revisioner för
             revision: Revision
-            full_path: Fullständig sökväg
-            slug: Slug
             update: Ändra till denna revisionen
+            cancel: Avbryt
             content: Content
             changes: Changes
             previous: Previous
             current: Nuvarande
+          sidebar:
+            revision:
+              zero: No Revisions
+              one: '%{count} Revision'
+              few: '%{count} Revisions'
+              many: '%{count} Revisions'
+              other: '%{count} Revisions'
 
         files:
           created: Filer uppladdade
@@ -229,10 +250,9 @@ sv:
 
         categories:
           index:
-            label: Kategorier
             edit: Ändra
             done: Klar
-            all: Alla
+            all: Alla Kategorier
             add: Lägg till
             add_placeholder: Lägga Kategori
           show:

@@ -1,4 +1,3 @@
-# encoding: utf-8
 en:
   activerecord:
     models:
@@ -7,6 +6,7 @@ en:
       comfy/cms/page: Page
       comfy/cms/snippet: Snippet
       comfy/cms/file: File
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ en:
         hostname: Hostname
         path: Path
         locale: Language
-        is_mirrored: Mirrored
       comfy/cms/layout:
         identifier: Identifier
         label: Layout Name
@@ -41,6 +40,11 @@ en:
         label: Label
         identifier: Identifier
         content: Content
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ en:
       cms:
         base:
           site_not_found: Site not found
-          fixtures_enabled: CMS Fixtures are enabled. All changes done here will be discarded.
+          seeds_enabled: CMS Seeds are enabled. All changes done here will be discarded.
 
           sites: Sites
           layouts: Layouts
@@ -84,7 +88,6 @@ en:
             create: Create Site
             cancel: Cancel
             update: Update Site
-            is_mirrored: Mirrored
 
         layouts:
           created: Layout created
@@ -106,12 +109,6 @@ en:
             title: New Layout
           edit:
             title: Editing Layout
-            revision: &revision
-              zero: No Revisions
-              one: '%{count} Revision'
-              few: '%{count} Revisions'
-              many: '%{count} Revisions'
-              other: '%{count} Revisions'
           form:
             select_parent_layout: Select Parent Layout
             select_app_layout: Select Application Layout
@@ -141,20 +138,40 @@ en:
             title: New Page
           edit:
             title: Editing Page
-            revision:
-              <<: *revision
           form:
             select_target_page: No Redirect
             preview: Preview
             create: Create Page
             cancel: Cancel
             update: Update Page
-            is_published: Published
             choose_link: Select page...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Layout has no content tags defined.<br/>
-              Edit the content to include a page or field tag. For example: <code>{{cms:page:content}}</code>
+              Edit the content to include a page or field tag. For example: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Snippet created
@@ -174,8 +191,6 @@ en:
             title: New Snippet
           edit:
             title: Editing Snippet
-            revision:
-              <<: *revision
           form:
             create: Create Snippet
             cancel: Cancel
@@ -189,13 +204,19 @@ en:
           show:
             title: Revisions for
             revision: Revision
-            full_path: Full Path
-            slug: Slug
             update: Update to this Revision
+            cancel: Cancel
             content: Content
             changes: Changes
             previous: Previous
             current: Current
+          sidebar:
+            revision:
+              zero: No Revisions
+              one: '%{count} Revision'
+              few: '%{count} Revisions'
+              many: '%{count} Revisions'
+              other: '%{count} Revisions'
 
         files:
           created: Files uploaded
@@ -229,10 +250,9 @@ en:
 
         categories:
           index:
-            label: Categories
             edit: Edit
             done: Done
-            all: All
+            all: All Categories
             add: Add
             add_placeholder: Add Category
           show:

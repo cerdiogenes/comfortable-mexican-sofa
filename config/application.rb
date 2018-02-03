@@ -1,15 +1,18 @@
-require File.expand_path('../boot', __FILE__)
+require_relative "boot"
 
-require 'rails/all'
+require "rails/all"
 
-# Assets should be precompiled for production (so we don't need the gems loaded then)
-Bundler.require(*Rails.groups(assets: %w(development test)))
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 module ComfortableMexicanSofa
   class Application < Rails::Application
-    
-    require_relative '../lib/comfortable_mexican_sofa'
-    
+
+    require_relative "../lib/comfortable_mexican_sofa"
+
+    config.load_defaults 5.2
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -21,10 +24,14 @@ module ComfortableMexicanSofa
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
-    
+
+    # Ensuring that all ActiveStorage routes are loaded before out globbing route.
+    config.railties_order = [ActiveStorage::Engine, :main_app, :all]
+
     # Making sure we don't load our dev routes as part of the engine
-    config.paths['config/routes.rb'] << 'config/cms_routes.rb'
-    
+    config.paths["config/routes.rb"] << "config/cms_routes.rb"
+
     config.i18n.enforce_available_locales = true
+
   end
 end

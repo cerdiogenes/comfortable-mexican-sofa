@@ -1,8 +1,8 @@
 # CMS Uploader using plupload http://www.plupload.com/. Code inspired by
 # plupload queue widget https://github.com/moxiecode/plupload/tree/master/js/jquery.plupload.queue
 #
-#= require moxie
-#= require plupload.dev
+#= require comfy/vendor/moxie.min
+#= require comfy/vendor/plupload.dev
 
 (($, o) ->
   window.CMS or (window.CMS = {})
@@ -13,19 +13,18 @@
       fileList = $(".cms-uploader-filelist", target)
 
       fileList.prepend("
-        <tr id='#{file.id}' class='temp'>
-          <td><div class='icon'></div></td>
-          <td class='main' colspan=2>
+        <li id='#{file.id}' class='row temp'>
+          <div class='col-md-9 d-flex align-items-center'>
             <div class='progress'>
-              <div class='progress-bar progress-bar-striped active'>
+              <div class='progress-bar progress-bar-striped progress-bar-animated'>
                 <span>#{file.name}</span>
               </div>
             </div>
-          </td>
-          <td>
-            <a class='btn btn-sm btn-danger pull-right cms-uploader-file-delete' href='#'>Delete</a>
-          </td>
-        </tr>
+          </div>
+          <div class='col-md-3 d-flex align-items-center justify-content-md-end'>
+            <a class='btn btn-sm btn-danger float-right cms-uploader-file-delete' href='#'>Delete</a>
+          </div>
+        </li>
       ")
 
       $("#" + file.id + " a.cms-uploader-file-delete").click (e) ->
@@ -69,18 +68,22 @@
       # Show drag and drop info and attach events if drag and drop is
       # supported and enabled.
       if up.settings.dragdrop and up.features.dragdrop
-        drop_element = $(up.settings.drop_element)
+        dropElement = $(up.settings.drop_element).get(0)
 
         # When dragging over the document add a class to the drop target
         # that puts it ontop of every element and remove that class when
         # dropping or leaving the drop target. Otherwise the dragleave
         # event would fire whenever we dragging over a child element inside
         # the drop target such as text nodes or stuff.
-        $(document).bind 'dragenter', (e) ->
-          drop_element.addClass('cms-uploader-drag-drop-target-active')
-
-        drop_element.bind 'drop dragleave', (e) ->
-          drop_element.removeClass('cms-uploader-drag-drop-target-active')
+        activeClass = 'cms-uploader-drag-drop-target-active'
+        document.addEventListener 'dragenter', (e) ->
+          # Only react to drag'n'drops that contain a file. See:
+          # https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/types
+          if e.dataTransfer.types.indexOf('Files') != -1
+            dropElement.classList.add(activeClass)
+        for eventName in ['drop', 'dragleave']
+          dropElement.addEventListener eventName, ->
+            dropElement.classList.remove(activeClass)
 
       else
         $('.cms-uploader-drag-drop-info', target).hide()
@@ -124,7 +127,7 @@
     uploader.bind "FileUploaded", (up, file, info) ->
       # Replace the dummy file entry in the file list with the the entry
       # from the server response.
-      $("tr##{file.id}").replaceWith(info.response)
+      $("li##{file.id}").replaceWith(info.response)
 
     uploader.bind 'FilesRemoved', (up, files) ->
       $.each files, (i, file) ->
@@ -134,4 +137,4 @@
     if settings.setup
       settings.setup(uploader)
 
-) jQuery, mOxie
+) jQuery, plupload

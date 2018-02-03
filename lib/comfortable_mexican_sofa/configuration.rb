@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 class ComfortableMexicanSofa::Configuration
 
   # Don't like ComfortableMexicanSofa? Set it to whatever you like. :(
@@ -25,15 +23,12 @@ class ComfortableMexicanSofa::Configuration
   # for example '/cms-admin/users'
   attr_accessor :admin_route_redirect
 
-  # Upload settings
-  attr_accessor :upload_file_options
-
   # With each page load, files will be synched with the database. Database entries are
-  # destroyed if there's no corresponding file. Fixtures are disabled by default.
-  attr_accessor :enable_fixtures
+  # destroyed if there's no corresponding file. Seeds are disabled by default.
+  attr_accessor :enable_seeds
 
-  # Path where fixtures can be located.
-  attr_accessor :fixtures_path
+  # Path where seeds can be located.
+  attr_accessor :seeds_path
 
   # Number of revisions kept. Default is 25. If you wish to disable: set this to 0.
   attr_accessor :revisions_limit
@@ -49,8 +44,8 @@ class ComfortableMexicanSofa::Configuration
   # A class that is included as a sweeper to admin base controller if it's set
   attr_accessor :admin_cache_sweeper
 
-  # Not allowing irb code to be run inside page content. False by default.
-  attr_accessor :allow_irb
+  # Not allowing erb code to be run inside page content. False by default.
+  attr_accessor :allow_erb
 
   # Whitelist of all helper methods that can be used via {{cms:helper}} tag. By default
   # all helpers are allowed except `eval`, `send`, `call` and few others. Empty array
@@ -80,43 +75,44 @@ class ComfortableMexicanSofa::Configuration
 
   # Configuration defaults
   def initialize
-    @cms_title            = 'ComfortableMexicanSofa CMS Engine'
-    @base_controller      = 'ApplicationController'
-    @admin_auth           = 'ComfortableMexicanSofa::AccessControl::AdminAuthentication'
-    @admin_authorization  = 'ComfortableMexicanSofa::AccessControl::AdminAuthorization'
-    @public_auth          = 'ComfortableMexicanSofa::AccessControl::PublicAuthentication'
-    @public_authorization = 'ComfortableMexicanSofa::AccessControl::PublicAuthorization'
+    @cms_title            = "ComfortableMexicanSofa CMS Engine"
+    @base_controller      = "ApplicationController"
+    @admin_auth           = "ComfortableMexicanSofa::AccessControl::AdminAuthentication"
+    @admin_authorization  = "ComfortableMexicanSofa::AccessControl::AdminAuthorization"
+    @public_auth          = "ComfortableMexicanSofa::AccessControl::PublicAuthentication"
+    @public_authorization = "ComfortableMexicanSofa::AccessControl::PublicAuthorization"
     @seed_data_path       = nil
-    @admin_route_redirect = ''
+    @admin_route_redirect = ""
     @enable_sitemap       = true
-    @upload_file_options  = { }
-    @enable_fixtures      = false
-    @fixtures_path        = File.expand_path('db/cms_fixtures', Rails.root)
+    @enable_seeds         = false
+    @seeds_path           = File.expand_path("db/cms_seeds", Rails.root)
     @revisions_limit      = 25
     @locales              = {
-      'cs'    => 'Česky',
-      'da'    => 'Dansk',
-      'de'    => 'Deutsch',
-      'en'    => 'English',
-      'es'    => 'Español',
-      'fr'    => 'Français',
-      'it'    => 'Italiano',
-      'ja'    => '日本語',
-      'nb'    => 'Norsk',
-      'nl'    => 'Nederlands',
-      'pl'    => 'Polski',
-      'pt-BR' => 'Português Brasileiro',
-      'ru'    => 'Русский',
-      'sk'    => 'Slovensky',
-      'sv'    => 'Svenska',
-      'tr'    => 'Türkçe',
-      'uk'    => 'Українська',
-      'zh-CN' => '简体中文',
-      'zh-TW' => '正體中文'
+      "ca"    => "Català",
+      "cs"    => "Česky",
+      "da"    => "Dansk",
+      "de"    => "Deutsch",
+      "en"    => "English",
+      "es"    => "Español",
+      "fr"    => "Français",
+      "gr"    => "Ελληνικά",
+      "it"    => "Italiano",
+      "ja"    => "日本語",
+      "nb"    => "Norsk",
+      "nl"    => "Nederlands",
+      "pl"    => "Polski",
+      "pt-BR" => "Português Brasileiro",
+      "ru"    => "Русский",
+      "sk"    => "Slovensky",
+      "sv"    => "Svenska",
+      "tr"    => "Türkçe",
+      "uk"    => "Українська",
+      "zh-CN" => "简体中文",
+      "zh-TW" => "正體中文"
     }
     @admin_locale         = nil
     @admin_cache_sweeper  = nil
-    @allow_irb            = false
+    @allow_erb            = false
     @allowed_helpers      = nil
     @allowed_partials     = nil
     @hostname_aliases     = nil

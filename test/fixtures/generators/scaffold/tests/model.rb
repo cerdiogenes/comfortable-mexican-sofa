@@ -11,15 +11,14 @@ class FooTest < ActiveSupport::TestCase
   def test_validation
     foo = Foo.new
     assert foo.invalid?
-    assert_errors_on foo, :bar
+    assert_equal [:bar], foo.errors.keys
   end
 
   def test_creation
     assert_difference 'Foo.count' do
       Foo.create(
-        :bar => 'test bar',
+        bar: 'test bar',
       )
     end
   end
-
 end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 fr:
   activerecord:
     models:
@@ -7,6 +6,7 @@ fr:
       comfy/cms/page: Page
       comfy/cms/snippet: Fragment
       comfy/cms/file: Fichier
+      comfy/cms/translation: Traduction
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ fr:
         hostname: Nom d'hôte
         path: Chemin
         locale: Langue
-        is_mirrored: En miroir
       comfy/cms/layout:
         identifier: Identifiant
         label: Nom de la mise en page
@@ -28,11 +27,11 @@ fr:
         label: Nom de la page
         layout_id: Mise en page
         slug: Identifiant
-        full_path: Full path
+        full_path: Chemin complet
         parent_id: Parent
         target_page_id: Rediriger vers
         content: Contenu
-        is_published: Publié
+        is_published: Publiée
       comfy/cms/file:
         label: Nom
         file: Fichier
@@ -41,6 +40,11 @@ fr:
         identifier: Identifiant
         label: Nom
         content: Contenu
+      comfy/cms/translation:
+        locale: Langue
+        label: Nom
+        layout_id: Mise en page
+        is_published: Publiée
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ fr:
       cms:
         base:
           site_not_found: Site introuvable
-          fixtures_enabled: Fixtures activés. Toutes les modifications seront supprimées.
+          seeds_enabled: Fixtures activés. Toutes les modifications seront supprimées.
 
           sites: Sites
           layouts: Mises en page
@@ -84,7 +88,6 @@ fr:
             create: Créer le site
             cancel: Annuler
             update: Modifier le site
-            is_mirrored: En miroir
 
         layouts:
           created: Mise en page créée
@@ -106,12 +109,6 @@ fr:
             title: Nouvelle mise en page
           edit:
             title: Modification de la mise en page
-            revision: &revision
-              zero: No Revisions
-              one: '%{count} Revision'
-              few: '%{count} Revisions'
-              many: '%{count} Revisions'
-              other: '%{count} Revisions'
           form:
             select_parent_layout: Sélectionner une mise en page parent
             select_app_layout: Sélectionner une mise en page de l'application
@@ -141,20 +138,40 @@ fr:
             title: Nouvelle page
           edit:
             title: Modification de la page
-            revision:
-              <<: *revision
           form:
             select_target_page: Pas de redirection
             preview: Prévisualiser
             create: Créer la page
             cancel: Annuler
             update: Modifier la page
-            is_published: Publié
-            choose_link: Select page...
-          form_blocks:
+            choose_link: Sélectionner une page...
+
+        fragments:
+          form_fragments:
             no_tags: |-
               Mise en page sans aucun tag de contenu.<br/>
-              Modifiez le contenu pour y ajouter un tag de page ou de champ. Exemple : <code>{{cms:page:content}}</code>
+              Modifiez le contenu pour y ajouter un tag de page ou de champ. Exemple : <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Traduction créée
+          creation_failure: Échec de la création de la traduction
+          updated: Traduction modifiée
+          update_failure: Échec de la modification de la traduction
+          deleted: Traduction supprimée
+          not_found: Traduction introuvable
+
+          new:
+            title: Nouvelle Traduction
+          edit:
+            title: Modification de la Traduction
+          form:
+            preview: Prévisualiser
+            create: Créer
+            update: Modifier
+            cancel: Annuler
+          sidebar:
+            new: Nouvelle Traduction
+            confirm: Êtes-vous sûr ?
 
         snippets:
           created: Fragment créé
@@ -174,8 +191,6 @@ fr:
             title: Nouveau fragment
           edit:
             title: Modification du fragment
-            revision:
-              <<: *revision
           form:
             create: Créer le fragment
             cancel: Annuler
@@ -189,13 +204,19 @@ fr:
           show:
             title: "Révisions :"
             revision: révision
-            full_path: Chemin complet
-            slug: Identifiant
             update: Restaurer cette révision
-            content: Content
-            changes: Changes
-            previous: Previous
-            current: Actuel
+            cancel: Annuler
+            content: Contenu
+            changes: Changements
+            previous: Précédente
+            current: Actuelle
+          sidebar:
+            revision:
+              zero: Pas de Révision
+              one: '%{count} Révision'
+              few: '%{count} Révisions'
+              many: '%{count} Révisions'
+              other: '%{count} Révisions'
 
         files:
           created: Fichier téléchargé
@@ -229,10 +250,9 @@ fr:
 
         categories:
           index:
-            label: Catégories
-            edit: Modifier les catégories
+            edit: Modifier
             done: Terminé
-            all: Tout
+            all: Toutes les Catégories
             add: Ajouter
             add_placeholder: Ajouter la Catégorie
           show:

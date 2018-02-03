@@ -1,4 +1,3 @@
-# encoding: utf-8
 nb:
   activerecord:
     models:
@@ -7,6 +6,7 @@ nb:
       comfy/cms/page: Side
       comfy/cms/snippet: Snutt
       comfy/cms/file: Fil
+      comfy/cms/translation: Translation
 
     attributes:
       comfy/cms/site:
@@ -15,7 +15,6 @@ nb:
         hostname: Tjenestenavn
         path: Sti
         locale: Språk
-        is_mirrored: Speilet
       comfy/cms/layout:
         identifier: Identifikator
         label: Layoutnavn
@@ -41,6 +40,11 @@ nb:
         identifier: Identifikator
         label: Navn
         content: Innhold
+      comfy/cms/translation:
+        locale: Language
+        label: Label
+        layout_id: Layout
+        is_published: Published
 
   comfy:
     cms:
@@ -53,7 +57,7 @@ nb:
       cms:
         base:
           site_not_found: Fant ikke nettside
-          fixtures_enabled: CMS Fixtures er aktivert. Alle endringer som er er utført vil bli fjernet.
+          seeds_enabled: CMS Fixtures er aktivert. Alle endringer som er er utført vil bli fjernet.
 
           sites: Nettsider
           layouts: Layouter
@@ -84,7 +88,6 @@ nb:
             create: Opprett nettside
             cancel: Cancel
             update: Oppdater nettside
-            is_mirrored: Speilet
 
         layouts:
           created: Layout opprettet
@@ -106,12 +109,6 @@ nb:
             title: Ny layout
           edit:
             title: Endrer layout
-            revision: &revision
-              zero: Ingen revisjoner
-              one: '%{count} revisjon'
-              few: '%{count} revisjoner'
-              many: '%{count} revisjoner'
-              other: '%{count} revisjoner'
           form:
             select_parent_layout: Velg hovedlayout
             select_app_layout: Velg applikasjonslayout
@@ -141,20 +138,40 @@ nb:
             title: Ny side
           edit:
             title: Endrer side
-            revision:
-              <<: *revision
           form:
             select_target_page: Ingen videresending
             preview: Forhåndsvisning
             create: Opprett side
             cancel: Cancel
             update: Endre side
-            is_published: Publisert
             choose_link: Velg side...
-          form_blocks:
+
+        fragments:
+          form_fragments:
             no_tags: |-
               layout har ingen innholdsknagger definert.<br/>
-              Endre innholdet til å inkludere innhold- eller feltknagg. For eksempel: <code>{{cms:page:content}}</code>
+              Endre innholdet til å inkludere innhold- eller feltknagg. For eksempel: <code>{{cms:wysiwyg content}}</code>
+
+        translations:
+          created: Translation created
+          creation_failure: Failed to create translation
+          updated: Translation updated
+          update_failure: Failed to update translation
+          deleted: Translation deleted
+          not_found: Translation not found
+
+          new:
+            title: New Translation
+          edit:
+            title: Editing Translation
+          form:
+            preview: Preview
+            create: Create
+            update: Update
+            cancel: Return to Page
+          sidebar:
+            new: New Translation
+            confirm: Are you sure?
 
         snippets:
           created: Snutt opprettet
@@ -174,8 +191,6 @@ nb:
             title: Ny snutt
           edit:
             title: Endrer snutt
-            revision:
-              <<: *revision
           form:
             create: Oprett snutt
             cancel: Cancel
@@ -189,13 +204,19 @@ nb:
           show:
             title: Revisjon for
             revision: Revisjon
-            full_path: Fullstendig sti
-            slug: Sti
             update: Oppdatert til denne revisjonen
+            cancel: Cancel
             content: Innhold
             changes: Endringer
             previous: Forrige
             current: Nåværende
+          sidebar:
+            revision:
+              zero: Ingen revisjoner
+              one: '%{count} revisjon'
+              few: '%{count} revisjoner'
+              many: '%{count} revisjoner'
+              other: '%{count} revisjoner'
 
         files:
           created: Opplastede filer
@@ -229,10 +250,9 @@ nb:
 
         categories:
           index:
-            label: Kategorier
             edit: Endre
             done: Ferdig
-            all: Alle
+            all: Alle Kategorier
             add: Legg til
             add_placeholder: Legg til kategori
           show:

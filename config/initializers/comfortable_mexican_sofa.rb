@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 ComfortableMexicanSofa.configure do |config|
   # Title of the admin area
   #   config.cms_title = 'ComfortableMexicanSofa CMS Engine'
@@ -30,32 +28,13 @@ ComfortableMexicanSofa.configure do |config|
   # for example '/cms-admin/users'
   #   config.admin_route_redirect = ''
 
-  # File uploads use Paperclip and can support filesystem or s3 uploads.  Override
-  # the upload method and appropriate settings based on Paperclip.  For S3 see:
-  # http://rdoc.info/gems/paperclip/2.3.8/Paperclip/Storage/S3, and for
-  # filesystem see: http://rdoc.info/gems/paperclip/2.3.8/Paperclip/Storage/Filesystem
-  # If you are using S3 and HTTPS, pass :s3_protocol => '' to have URLs that use the protocol of the page
-  #   config.upload_file_options = {:url => '/system/:class/:id/:attachment/:style/:filename'}
-
   # Sofa allows you to setup entire site from files. Database is updated with each
   # request (if necessary). Please note that database entries are destroyed if there's
-  # no corresponding file. Fixtures are disabled by default.
-  #   config.enable_fixtures = false
+  # no corresponding file. Seeds are disabled by default.
+  #   config.enable_seeds = false
 
-  # Path where fixtures can be located.
-  #   config.fixtures_path = File.expand_path('db/cms_fixtures', Rails.root)
-
-  # Importing fixtures into Database
-  # To load fixtures into the database just run this rake task:
-  #   local: $ rake comfortable_mexican_sofa:fixtures:import FROM=example.local TO=localhost
-  #   Heroku: $ heroku run rake comfortable_mexican_sofa:fixtures:import FROM=example.local TO=yourapp.herokuapp.com
-  # From indicates folder the fixtures are in and to is the Site hostname you have defined in the database.
-
-  # Exporting fixtures into Files
-  # If you need to dump database contents into fixture files run:
-  #   local: $ rake comfortable_mexican_sofa:fixtures:export FROM=localhost TO=example.local
-  #   Heroku: $ heroku run rake comfortable_mexican_sofa:fixtures:export FROM=yourapp.herokuapp.com TO=example.local
-  # This will create example.local folder and dump all content from example.com Site.
+  # Path where seeds can be located.
+  #   config.seeds_path = File.expand_path('db/cms_seeds', Rails.root)
 
   # Content for Layouts, Pages and Snippets has a revision history. You can revert
   # a previous version using this system. You can control how many revisions per
@@ -76,7 +55,7 @@ ComfortableMexicanSofa.configure do |config|
   # By default you cannot have irb code inside your layouts/pages/snippets.
   # Generally this is to prevent putting something like this:
   # <% User.delete_all %> but if you really want to allow it...
-  #   config.allow_irb = false
+  #   config.allow_erb = false
 
   # Whitelist of all helper methods that can be used via {{cms:helper}} tag. By default
   # all helpers are allowed except `eval`, `send`, `call` and few others. Empty array
@@ -96,13 +75,12 @@ ComfortableMexicanSofa.configure do |config|
   # Reveal partials that can be overwritten in the admin area.
   # Default is false.
   #   config.reveal_cms_partials = false
-
 end
 
 # Default credentials for ComfortableMexicanSofa::AccessControl::AdminAuthentication
 # YOU REALLY WANT TO CHANGE THIS BEFORE PUTTING YOUR SITE LIVE
-ComfortableMexicanSofa::AccessControl::AdminAuthentication.username = 'username'
-ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = 'password'
+ComfortableMexicanSofa::AccessControl::AdminAuthentication.username = "username"
+ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = "password"
 
 # Uncomment this module and `config.admin_auth` above to use custom admin authentication
 # module ComfyAdminAuthentication
