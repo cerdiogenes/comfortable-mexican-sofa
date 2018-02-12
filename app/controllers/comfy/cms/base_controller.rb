@@ -19,7 +19,7 @@ protected
           params[:cms_path] = params[:path] if params[:path].present?
           edition = event.editions.last
         end
-        cms_path  = "#{event.acronym}/#{edition.path}"
+        cms_path  = "#{event.slug}/#{edition.path}"
         cms_path += "/#{params[:cms_path]}" if params[:cms_path].present?
         params[:cms_path] = cms_path
         if params[:cms_path] && params[:cms_path].match(/\A#{@cms_site.path}/)

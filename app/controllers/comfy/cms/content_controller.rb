@@ -55,7 +55,7 @@ protected
   end
 
   def load_cms_page
-    event = Event.find_by(acronym: params[:acronym])
+    event = Event.find_by(acronym: params[:slug].upcase)
     edition = event.editions.find_by(path: params[:path])
     params[:cms_path] = "#{params[:path]}" if edition.nil?
     @cms_page = @cms_site.pages.published.find_by_full_path!("/#{params[:cms_path]}")
