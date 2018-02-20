@@ -22,3 +22,4 @@
 #= require comfy/admin/cms/uploader
 #= require comfy/admin/cms/files
 #= require comfy/admin/cms/custom
+#= require k-flatpickr
